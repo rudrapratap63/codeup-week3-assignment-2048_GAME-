@@ -1,4 +1,4 @@
-// GamePanel class for all GUI related components
+// GamePanel class for all GUI related components and This file contains all UI related functions. 
 
 import java.awt.Color;
 import java.awt.Font;
@@ -14,7 +14,6 @@ public class GamePanel extends JPanel {
     private final int size;
     private int score;
     private int highScore;
-    Constant constant = new Constant();
 
     // Constructor to initialize the GamePanel with 2D array 
     // input - 2D Integer Array, Integer
@@ -26,6 +25,7 @@ public class GamePanel extends JPanel {
     }
 
     // paintComponent of drawing board and score
+    // Input - graphics object
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         Graphics2D graphics2D = (Graphics2D) graphics;
@@ -34,13 +34,14 @@ public class GamePanel extends JPanel {
         drawScore(graphics2D);
     }
 
-    // Drawing Board and setColor and font size 
+    //This function Draw Board and setColor to Light grayish yellow and set font functionality
+    // Input - graphics2D object
     private void drawBoard(Graphics2D graphics2D) {
         graphics2D.setColor(new Color(0xfaf8ef));
         graphics2D.fillRect(0, 100, getWidth(), getHeight() - 50); 
         int padding = 15;
         int tileSize = (getWidth() - (padding * (size + 1))) / size; 
-        graphics2D.setFont(new Font(constant.FONT_NAME, Font.BOLD, tileSize / 3));
+        graphics2D.setFont(new Font(Constant.FONT_NAME, Font.BOLD, tileSize / 3));
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 drawTile(graphics2D, i, j, tileSize, padding);
@@ -52,21 +53,21 @@ public class GamePanel extends JPanel {
     // Input - Graphics2d class, Integer
     private void drawTile(Graphics2D graphics2D, int row, int column, int tileSize, int padding) {
         int value = board[row][column];
-        int x = column * (tileSize + padding) + padding; 
-        int y = row * (tileSize + padding) + padding; 
-        GradientPaint gradient = new GradientPaint(x, y, getTileColor(value), x + tileSize, y + tileSize, getTileColor(value).brighter());
-        graphics2D.setPaint(gradient);
-        graphics2D.fill(new RoundRectangle2D.Float(x, y, tileSize, tileSize, 15, 15));
+        int tileXPosition = column * (tileSize + padding) + padding; 
+        int tileYPosition = row * (tileSize + padding) + padding; 
+        GradientPaint gradient = new GradientPaint(tileXPosition, tileYPosition, getTileColor(value), tileXPosition + tileSize, tileYPosition + tileSize, getTileColor(value).brighter());
+        graphics2D.setPaint(gradient);  
+        graphics2D.fill(new RoundRectangle2D.Float(tileXPosition, tileYPosition, tileSize, tileSize, 15, 15));
         
         graphics2D.setColor(getTileBorderColor());
-        graphics2D.draw(new RoundRectangle2D.Float(x, y, tileSize, tileSize, 15, 15));
+        graphics2D.draw(new RoundRectangle2D.Float(tileXPosition, tileYPosition, tileSize, tileSize, 15, 15));
         if (value != 0) {
             graphics2D.setColor(getTileTextColor(value));
-            graphics2D.setFont(new Font(constant.FONT_NAME, Font.BOLD, tileSize / 3));
+            graphics2D.setFont(new Font(Constant.FONT_NAME, Font.BOLD, tileSize / 3));
             String text = String.valueOf(value);
             int textWidth = graphics2D.getFontMetrics().stringWidth(text);
             int textHeight = graphics2D.getFontMetrics().getAscent();
-            graphics2D.drawString(text, x + (tileSize - textWidth) / 2, y + (tileSize + textHeight) / 2 - 4);
+            graphics2D.drawString(text, tileXPosition + (tileSize - textWidth) / 2, tileYPosition + (tileSize + textHeight) / 2 - 4);
         }
     }
 
@@ -76,11 +77,14 @@ public class GamePanel extends JPanel {
         graphics2D.setColor(new Color(0xbbada0));
         graphics2D.fillRect(0, getHeight() - 50, getWidth(), 50); 
         graphics2D.setColor(Color.WHITE);
-        graphics2D.setFont(new Font(constant.FONT_NAME, Font.BOLD, 28));
+        graphics2D.setFont(new Font(Constant.FONT_NAME, Font.BOLD, 28));
         graphics2D.drawString("Score: " + score, 10, getHeight() - 15);
-        graphics2D.drawString(constant.BEST + highScore, getWidth() - graphics2D.getFontMetrics().stringWidth(constant.BEST + highScore) - 10, getHeight() - 15);
+        graphics2D.drawString(Constant.BEST + highScore, getWidth() - graphics2D.getFontMetrics().stringWidth(Constant.BEST + highScore) - 10, getHeight() - 15);
     }
 
+    // This function return tile color based on present key in tile
+    // Input - Integer
+    // Output - Color class
     private Color getTileColor(int value) {
         return switch (value) {
             case 2 -> new Color(0xeee4da);
@@ -98,6 +102,7 @@ public class GamePanel extends JPanel {
         };
     }
 
+    //This function return tile borderColor Grayish orange.
     private Color getTileBorderColor() {
         return new Color(0xbbada0); 
     }
