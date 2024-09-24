@@ -14,16 +14,14 @@ public class CustomStack {
     // insertIntoStack method to insert an item to the top of stack
     public void insertIntoStack(Game.GameState state) {
         if (top < maxSize - 1) {
-            top = top + 1;
-            stack[top] = state;
+            stack[++top] = state;
         } 
     }
 
     // removeFromStack method to remove and return the top item from the stack
     public Game.GameState removeFromStack() {
         if (!isStackEmpty()) {
-            top = top - 1;
-            return stack[top];
+            return stack[top--];
         } else {
             return null; 
         }
@@ -33,5 +31,8 @@ public class CustomStack {
     public boolean isStackEmpty() {
         return top == -1;
     }
-}
 
+    public void emptyStack() {
+        top = -1; 
+    }
+}
